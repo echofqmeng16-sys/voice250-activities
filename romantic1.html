@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Listening Detective ① · Beethoven&#39;s Two Worlds | Classical Music Appreciation</title>
+<style>
+:root{--paper:#faf6ef;--ink:#2b2620;--accent:#5e2b4e;--gold:#b98a2f;--card:#ffffff;--line:#e7ddcc;--ok:#2e7d4f;--bad:#b23b3b;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,sans-serif;line-height:1.75;max-width:680px;margin:0 auto;padding:0 16px 96px;}
+body.locked .big-btn,body.locked .opt,body.locked .chip,body.locked textarea,body.locked .note-btn{pointer-events:none;opacity:.45}
+header{background:linear-gradient(135deg,#5e2b4e,#3d1c33);color:#fff;border-radius:0 0 20px 20px;padding:28px 22px 22px;margin:0 -16px 20px;}
+header .tag{display:inline-block;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:1px 12px;font-size:13px;margin-bottom:10px}
+header h1{font-size:24px;line-height:1.35;font-family:Georgia,"Times New Roman",serif;}
+header p{opacity:.92;font-size:14px;margin-top:8px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:12px;border-left:4px solid var(--accent);font-family:Georgia,"Times New Roman",serif;}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin:12px 0;box-shadow:0 2px 10px rgba(60,40,20,.05);}
+.namecard{background:#fdf3e3;border:2px solid var(--gold);}
+.namecard input{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:12px;font-size:17px;background:#fff;margin:8px 0;}
+.name-btn{width:100%;border:none;background:var(--accent);color:#fff;border-radius:12px;padding:12px;font-size:16px;font-weight:700;cursor:pointer;}
+.greet{display:none;color:var(--ok);font-weight:700;margin-top:4px}
+ol.steps{padding-left:22px}
+ol.steps li{margin:8px 0}
+ol.steps b{color:var(--accent)}
+.big-btn{border:2px solid var(--line);background:#fff;border-radius:14px;padding:16px 10px;font-size:16px;font-weight:700;color:var(--ink);cursor:pointer;transition:.15s;line-height:1.4;width:100%}
+.big-btn small{display:block;font-weight:400;color:#8b8177;font-size:12px}
+.big-btn.on{border-color:var(--ok);background:#e9f5ee;color:var(--ok);}
+.tapzone{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+.counter{font-size:34px;font-weight:800;color:var(--accent);text-align:center;font-family:Georgia,serif;}
+.quiz-q{padding:12px 0;border-bottom:1px dashed var(--line);}
+.quiz-q:last-child{border-bottom:none}
+.quiz-q .qt{font-weight:700;margin-bottom:8px}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opt{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px;font-size:14px;cursor:pointer}
+.opt.right{border-color:var(--ok);background:#e9f5ee;color:var(--ok);font-weight:700}
+.opt.wrong{border-color:var(--bad);background:#f9eaea;color:var(--bad);}
+.opt:disabled{cursor:default;opacity:.9}
+.hint{font-size:13px;color:#8b8177;margin-top:6px}
+.result{position:fixed;left:0;right:0;bottom:0;background:#2b2620;color:#fff;padding:10px 16px;font-size:14px;z-index:9;text-align:center;}
+.result b{color:#f3c96b}
+textarea{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:10px;font-size:15px;font-family:inherit;min-height:80px;background:#fffdf8}
+.note-btn{border:none;background:var(--gold);color:#fff;border-radius:999px;padding:8px 20px;font-size:15px;font-weight:700;cursor:pointer;margin-top:8px}
+.submit-btn{width:100%;border:none;background:var(--ok);color:#fff;border-radius:14px;padding:14px;font-size:17px;font-weight:700;cursor:pointer;}
+.submit-btn:disabled{background:#9db3a5;cursor:default;}
+.reveal{display:none;background:#f4ecd9;border-left:4px solid var(--gold);border-radius:10px;padding:12px 14px;margin-top:10px;font-size:14px}
+.reveal.show{display:block}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.chip{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:7px 16px;font-size:15px;cursor:pointer}
+.chip.on{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:700}
+footer{text-align:center;color:#a3988a;font-size:12px;margin-top:36px;line-height:1.9}
+</style>
+</head>
+<body class="locked">
+<header>
+  <span class="tag">In-Class Activity ① · about 9 minutes</span>
+  <h1>Beethoven&#39;s Two Worlds<br>— The Brook &amp; The “Ode to Joy”</h1>
+  <p>Two symphonies from the same year (1824): one wanders the countryside, one gathers all of humanity. Two games, one composer.</p>
+</header>
+
+<div class="card namecard" id="nameCard">
+  <b>👤 First things first — your name</b>
+  <p class="hint" style="margin:4px 0 0">Please enter your name (or student ID). The timer starts as soon as you tap “Start”.</p>
+  <input id="stName" type="text" placeholder="Your name / ID" autocomplete="off">
+  <button class="name-btn" onclick="startAct()">▶ Start</button>
+  <p class="greet" id="greet"></p>
+</div>
+
+<h2>🔎 How it works</h2>
+<div class="card">
+<ol class="steps">
+  <li><b>Game 1 — Symphony No. 6 “Pastorale”, 2nd movement (“Scene by the Brook”):</b> at the very end, three instruments imitate three birds. Tap <b>“I hear a bird!”</b> every time — how many calls can you catch?</li>
+  <li><b>Game 2 — Symphony No. 9, finale (“Ode to Joy”):</b> the famous tune arrives quietly and grows like a sunrise. Tap <b>“NEW WAVE!”</b> each time it comes back with MORE forces behind it.</li>
+  <li><b>Vote + quiz:</b> which world do you enter more easily — nature, or brotherhood?</li>
+  <li><b>Submit:</b> tap the green button at the bottom when you finish.</li>
+</ol>
+</div>
+
+<h2>🐦 Game 1 · Scene by the Brook — bird-call hunt</h2>
+<div class="card">
+  <p style="font-size:14px;color:#7a7166;margin-bottom:8px">Listening tip: stay patient through the gentle stream music — near the end, the solo woodwinds start talking like birds.</p>
+  <button class="big-btn" onclick="tapBird(this)">🐦 I HEAR A BIRD!<small>tap once per bird call</small></button>
+  <p class="counter" id="cntBird">0</p>
+  <p class="hint" style="text-align:center">bird calls you caught</p>
+  <div class="reveal" id="birdReveal"><b>The three birds of the brook:</b> 🕊️ <b>Nightingale</b> (flute) · 🐤 <b>Quail</b> (oboe) · 🐦 <b>Cuckoo</b> (clarinet). Beethoven tells us exactly which instruments play which bird — the oldest “program notes” in a score!</div>
+</div>
+
+<h2>🌊 Game 2 · “Ode to Joy” — count the waves</h2>
+<div class="card">
+  <p style="font-size:14px;color:#7a7166;margin-bottom:8px">Listening tip: in the finale, cellos and basses alone hum the tune first — almost shy. Then it returns again and again, each time bigger. Tap at every wave:</p>
+  <button class="big-btn" onclick="tapWave(this)">🌊 NEW WAVE!<small>the tune returns with more forces</small></button>
+  <p class="counter" id="cntWave">0</p>
+  <p class="hint" style="text-align:center">waves you rode (most performances: 4–6)</p>
+  <div class="reveal" id="waveReveal"><b>What you just heard:</b> melody → variations → full orchestra → <b>CHORUS + orchestra</b> (the shock of 1824: voices inside a symphony!) → everything at once. Beethoven turns one tune into a sunrise — a crescendo that never needs to get louder, only fuller.</div>
+</div>
+
+<h2>🗳️ Which Beethoven world is easier to enter?</h2>
+<div class="card">
+  <div class="opts">
+    <button class="opt" id="voteN" onclick="vote('Nature')">🌳 The brook (nature)</button>
+    <button class="opt" id="voteJ" onclick="vote('Joy')">🤝 The “Ode” (brotherhood)</button>
+    <button class="opt" id="voteB" onclick="vote('Both')">💜 Both, easily</button>
+  </div>
+  <p class="hint" id="voteMsg"></p>
+</div>
+
+<h2>📝 Quick quiz</h2>
+<div class="card" id="quiz">
+  <div class="quiz-q" data-q="1"><p class="qt">1. At the end of “Scene by the Brook”, the bird calls are played by…</p><div class="opts">
+    <button class="opt">Three trumpets</button><button class="opt" data-ok="1">Three solo woodwinds (flute, oboe, clarinet)</button><button class="opt">The whole string section</button><button class="opt">Actual recorded birds</button></div></div>
+  <div class="quiz-q" data-q="2"><p class="qt">2. Symphony No. 9 was revolutionary mainly because…</p><div class="opts">
+    <button class="opt">It has only three movements</button><button class="opt">It avoids all melodies</button><button class="opt" data-ok="1">A choir and solo singers join the orchestra</button><button class="opt">It is exactly one hour long</button></div></div>
+  <div class="quiz-q" data-q="3"><p class="qt">3. The words of the “Ode to Joy” were written by the poet…</p><div class="opts">
+    <button class="opt">Goethe</button><button class="opt" data-ok="1">Schiller</button><button class="opt">Shakespeare</button><button class="opt">Müller</button></div></div>
+  <div class="quiz-q" data-q="4"><p class="qt">4. The 6th and 9th Symphonies were first performed in…</p><div class="opts">
+    <button class="opt">Different cities, different years</button><button class="opt" data-ok="1">The same Vienna concert, 1824</button><button class="opt">Paris, 1808</button><button class="opt">London, 1827</button></div></div>
+  <div class="quiz-q" data-q="5"><p class="qt">5. Beethoven called the 6th Symphony “Pastorale” because it is…</p><div class="opts">
+    <button class="opt">A hunting soundtrack</button><button class="opt">Music about Greek gods</button><button class="opt" data-ok="1">“Recollections of country life” — feeling, not literal painting</button><button class="opt">A birthday gift for a prince</button></div></div>
+  <p class="hint">Tap an option for instant feedback.</p>
+</div>
+
+<h2>📤 Submit your answers</h2>
+<div class="card">
+  <button class="submit-btn" id="subBtn" onclick="submitAll()">Submit my answers</button>
+  <p class="hint" id="subMsg"></p>
+</div>
+
+<footer>Classical Music Appreciation · The Romantic Era</footer>
+<div class="result">👤 <b id="who">–</b> ・ 🐦 <b id="barB">0</b> ・ 🌊 <b id="barW">0</b> ・ ⏱ <b id="timer">00:00</b></div>
+
+<script>
+const WEB3FORMS_KEY=""; // ← free key from web3forms.com (only an email needed)
+var SUBMIT_URL=""; // local server: "/submit"; or paste any full endpoint URL
+if(WEB3FORMS_KEY){SUBMIT_URL="https://api.web3forms.com/submit";}
+var name="", t0=null, timerInt=null, submitted=false;
+var birdCnt=0, birdTimes=[], waveCnt=0, waveTimes=[], voteChoice=null, quizAns=[], score=0;
+function startAct(){
+  var v=document.getElementById('stName').value.trim();
+  if(!v){alert('Please enter your name first 🙂');return;}
+  name=v; t0=Date.now();
+  document.body.classList.remove('locked');
+  document.getElementById('stName').disabled=true;
+  document.querySelector('.name-btn').style.display='none';
+  var g=document.getElementById('greet'); g.style.display='block';
+  g.textContent='✅ Enjoy Beethoven\'s worlds, '+name+'!';
+  document.getElementById('who').textContent=name;
+  timerInt=setInterval(function(){
+    var s=Math.floor((Date.now()-t0)/1000);
+    document.getElementById('timer').textContent=String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
+  },1000);
+}
+function tapBird(btn){
+  birdCnt++; birdTimes.push(Math.round((Date.now()-t0)/10)/10);
+  document.getElementById('cntBird').textContent=birdCnt;
+  document.getElementById('barB').textContent=birdCnt;
+  document.getElementById('birdReveal').classList.add('show');
+  btn.classList.add('on'); setTimeout(function(){btn.classList.remove('on');},250);
+}
+function tapWave(btn){
+  waveCnt++; waveTimes.push(Math.round((Date.now()-t0)/10)/10);
+  document.getElementById('cntWave').textContent=waveCnt;
+  document.getElementById('barW').textContent=waveCnt;
+  if(waveCnt>=2){document.getElementById('waveReveal').classList.add('show');}
+  btn.classList.add('on'); setTimeout(function(){btn.classList.remove('on');},250);
+}
+function vote(c){
+  voteChoice=c;
+  document.getElementById('voteN').classList.toggle('on',c==='Nature');
+  document.getElementById('voteJ').classList.toggle('on',c==='Joy');
+  document.getElementById('voteB').classList.toggle('on',c==='Both');
+  document.getElementById('voteMsg').textContent='Got it — you chose: '+c;
+}
+document.querySelectorAll('.quiz-q').forEach(function(q){
+  var done=false, qn=parseInt(q.dataset.q);
+  q.querySelectorAll('.opt').forEach(function(o){
+    o.addEventListener('click',function(){
+      if(done)return; done=true;
+      var t=(Date.now()-t0)/1000, ok=!!o.dataset.ok;
+      quizAns.push({q:qn,t:Math.round(t*10)/10,ok:ok});
+      if(ok){o.classList.add('right');score++;}
+      else{o.classList.add('wrong'); q.querySelector('[data-ok]').classList.add('right');}
+      q.querySelectorAll('.opt').forEach(function(x){x.disabled=true;});
+    });
+  });
+});
+function submitAll(){
+  if(!t0){alert('Please enter your name and tap Start first.');return;}
+  if(submitted)return;
+  if(quizAns.length<5 && !confirm('You have only answered '+quizAns.length+'/5 questions. Submit anyway?'))return;
+  submitted=true;
+  var btn=document.getElementById('subBtn'); btn.disabled=true; btn.textContent='Submitting…';
+  var payload={name:name, activity:'R1', totalSec:Math.round((Date.now()-t0)/100),
+    birds:birdCnt, birdTimes:birdTimes, waves:waveCnt, waveTimes:waveTimes, vote:voteChoice, quiz:quizAns};
+  if(!SUBMIT_URL){btn.textContent='✅ Done!';document.getElementById('subMsg').textContent='Your answers are saved on this device. Your instructor will collect responses via Mentimeter.';return;}
+  if(WEB3FORMS_KEY){payload=Object.assign({access_key:WEB3FORMS_KEY,subject:"Class Activity"},payload);}
+  fetch(SUBMIT_URL,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(payload)})
+    .then(function(r){if(!r.ok)throw 0;return r.json();})
+    .then(function(){btn.textContent='✅ Submitted — thank you!';document.getElementById('subMsg').textContent='Your results have been sent to the instructor.';})
+    .catch(function(){submitted=false;btn.disabled=false;btn.textContent='Submit my answers';document.getElementById('subMsg').textContent='⚠️ Could not send your answers. If the instructor has not set up a submission link, your results stay safely on this device.';});
+}
+</script>
+</body>
+</html>
