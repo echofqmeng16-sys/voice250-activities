@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Listening Detective ② · Songs, Nights &amp; Obsessions | Classical Music Appreciation</title>
+<style>
+:root{--paper:#faf6ef;--ink:#2b2620;--accent:#5e2b4e;--gold:#b98a2f;--card:#ffffff;--line:#e7ddcc;--ok:#2e7d4f;--bad:#b23b3b;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,sans-serif;line-height:1.75;max-width:680px;margin:0 auto;padding:0 16px 96px;}
+body.locked .big-btn,body.locked .opt,body.locked .chip,body.locked textarea,body.locked .note-btn{pointer-events:none;opacity:.45}
+header{background:linear-gradient(135deg,#5e2b4e,#3d1c33);color:#fff;border-radius:0 0 20px 20px;padding:28px 22px 22px;margin:0 -16px 20px;}
+header .tag{display:inline-block;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:1px 12px;font-size:13px;margin-bottom:10px}
+header h1{font-size:24px;line-height:1.35;font-family:Georgia,"Times New Roman",serif;}
+header p{opacity:.92;font-size:14px;margin-top:8px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:12px;border-left:4px solid var(--accent);font-family:Georgia,"Times New Roman",serif;}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin:12px 0;box-shadow:0 2px 10px rgba(60,40,20,.05);}
+.namecard{background:#fdf3e3;border:2px solid var(--gold);}
+.namecard input{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:12px;font-size:17px;background:#fff;margin:8px 0;}
+.name-btn{width:100%;border:none;background:var(--accent);color:#fff;border-radius:12px;padding:12px;font-size:16px;font-weight:700;cursor:pointer;}
+.greet{display:none;color:var(--ok);font-weight:700;margin-top:4px}
+ol.steps{padding-left:22px}
+ol.steps li{margin:8px 0}
+ol.steps b{color:var(--accent)}
+.big-btn{border:2px solid var(--line);background:#fff;border-radius:14px;padding:16px 10px;font-size:16px;font-weight:700;color:var(--ink);cursor:pointer;transition:.15s;line-height:1.4;width:100%}
+.big-btn small{display:block;font-weight:400;color:#8b8177;font-size:12px}
+.big-btn.on{border-color:var(--ok);background:#e9f5ee;color:var(--ok);}
+.tapzone{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+.counter{font-size:34px;font-weight:800;color:var(--accent);text-align:center;font-family:Georgia,serif;}
+.quiz-q{padding:12px 0;border-bottom:1px dashed var(--line);}
+.quiz-q:last-child{border-bottom:none}
+.quiz-q .qt{font-weight:700;margin-bottom:8px}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opt{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px;font-size:14px;cursor:pointer}
+.opt.right{border-color:var(--ok);background:#e9f5ee;color:var(--ok);font-weight:700}
+.opt.wrong{border-color:var(--bad);background:#f9eaea;color:var(--bad);}
+.opt:disabled{cursor:default;opacity:.9}
+.hint{font-size:13px;color:#8b8177;margin-top:6px}
+.result{position:fixed;left:0;right:0;bottom:0;background:#2b2620;color:#fff;padding:10px 16px;font-size:14px;z-index:9;text-align:center;}
+.result b{color:#f3c96b}
+textarea{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:10px;font-size:15px;font-family:inherit;min-height:80px;background:#fffdf8}
+.note-btn{border:none;background:var(--gold);color:#fff;border-radius:999px;padding:8px 20px;font-size:15px;font-weight:700;cursor:pointer;margin-top:8px}
+.submit-btn{width:100%;border:none;background:var(--ok);color:#fff;border-radius:14px;padding:14px;font-size:17px;font-weight:700;cursor:pointer;}
+.submit-btn:disabled{background:#9db3a5;cursor:default;}
+.reveal{display:none;background:#f4ecd9;border-left:4px solid var(--gold);border-radius:10px;padding:12px 14px;margin-top:10px;font-size:14px}
+.reveal.show{display:block}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.chip{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:7px 16px;font-size:15px;cursor:pointer}
+.chip.on{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:700}
+footer{text-align:center;color:#a3988a;font-size:12px;margin-top:36px;line-height:1.9}
+</style>
+</head>
+<body class="locked">
+<header>
+  <span class="tag">In-Class Activity ② · about 12 minutes</span>
+  <h1>Songs, Nights &amp; Obsessions<br>— Schubert · Chopin · Berlioz</h1>
+  <p>One singer plays four roles, one piano sings at midnight, and one melody refuses to die. Three games of Romantic imagination.</p>
+</header>
+
+<div class="card namecard" id="nameCard">
+  <b>👤 First things first — your name</b>
+  <p class="hint" style="margin:4px 0 0">Please enter your name (or student ID). The timer starts as soon as you tap “Start”.</p>
+  <input id="stName" type="text" placeholder="Your name / ID" autocomplete="off">
+  <button class="name-btn" onclick="startAct()">▶ Start</button>
+  <p class="greet" id="greet"></p>
+</div>
+
+<h2>🔎 How it works</h2>
+<div class="card">
+<ol class="steps">
+  <li><b>Game 1 — Schubert, “Erlkönig”:</b> ONE singer plays the narrator, the father, the child and the Erlking — while the piano gallops. Tap <b>who is “on stage”</b> as the story races.</li>
+  <li><b>Game 2 — Chopin, Nocturne Op. 9 No. 2:</b> choose up to 3 mood words for this midnight miniature, and write one sentence.</li>
+  <li><b>Game 3 — Berlioz, “Symphonie fantastique”:</b> you will hear the same melody twice — in two different movements. Vote: same theme, or different?</li>
+  <li><b>Quiz:</b> 5 questions covering today&#39;s four composers (yes, Liszt hides in there too).</li>
+  <li><b>Submit:</b> tap the green button at the bottom when you finish.</li>
+</ol>
+</div>
+
+<h2>🎭 Game 1 · “Erlkönig” — who is singing now?</h2>
+<div class="card">
+  <div class="tapzone">
+    <button class="big-btn" onclick="tapWho('father',this)">👴 FATHER<small>low, steady, reassuring</small></button>
+    <button class="big-btn" onclick="tapWho('child',this)">👦 CHILD<small>high, panicked cries</small></button>
+  </div>
+  <div class="tapzone" style="margin-top:10px">
+    <button class="big-btn" onclick="tapWho('erlking',this)">🌑 ERLKING<small>sweet, seductive, creepy</small></button>
+    <button class="big-btn" onclick="tapWho('horse',this)">🐎 THE HORSE<small>piano triplets = galloping</small></button>
+  </div>
+  <p class="hint" style="margin-top:8px">Father: <b id="cntF">0</b> ・ Child: <b id="cntC">0</b> ・ Erlking: <b id="cntE">0</b> ・ Horse: <b id="cntH">0</b></p>
+  <div class="reveal" id="erlkReveal"><b>One voice, four characters.</b> Schubert changes the singer&#39;s pitch and the piano&#39;s pattern to switch scenes — low and calm (father), high and gasping (child), soft and sweet (the Erlking — that&#39;s what makes it terrifying). The piano never stops galloping… until it does.</div>
+</div>
+
+<h2>🌙 Game 2 · Chopin Nocturne — your midnight mood</h2>
+<div class="card">
+  <div class="chips" data-group="N">
+    <button class="chip">dreamy</button><button class="chip">tender</button><button class="chip">longing</button><button class="chip">melancholy</button><button class="chip">serene</button><button class="chip">nocturnal</button><button class="chip">singing</button><button class="chip">intimate</button><button class="chip">nostalgic</button><button class="chip">calm</button><button class="chip">passionate</button><button class="chip">floating</button>
+  </div>
+  <p class="hint">Selected: <b id="cntN">0</b>/3</p>
+  <textarea id="free" style="margin-top:10px" placeholder="One sentence about this music, e.g. “A confession whispered at midnight…”"></textarea>
+  <button class="note-btn" onclick="saveFree()">Save my sentence</button>
+  <p class="hint" id="savedMsg"></p>
+</div>
+
+<h2>🎭 Game 3 · Berlioz — same theme, or twisted?</h2>
+<div class="card">
+  <p style="font-size:14px;color:#7a7166;margin-bottom:8px">Listen to Excerpt A (1st movement) and Excerpt B (5th movement, the “Witches’ Sabbath”). Then vote:</p>
+  <div class="opts">
+    <button class="opt" id="sameY" onclick="voteSame(true)">🔄 SAME melody, changed costume</button>
+    <button class="opt" id="sameN" onclick="voteSame(false)">✨ COMPLETELY different music</button>
+  </div>
+  <p class="hint" id="sameMsg"></p>
+  <div class="reveal" id="sameReveal"><b>It IS the same melody.</b> Berlioz calls it the <b>idée fixe</b> — the “fixed idea”, a melody representing the beloved (an actress he was obsessed with). It stalks all five movements, twisted by each scene: dreamy in the ballroom… grotesque at the witches&#39; sabbath. Liszt borrowed the trick and named it <b>thematic transformation</b>.</div>
+</div>
+
+<h2>📝 Quick quiz</h2>
+<div class="card" id="quiz">
+  <div class="quiz-q" data-q="1"><p class="qt">1. In “Erlkönig”, the piano&#39;s constant triplets paint…</p><div class="opts">
+    <button class="opt">Falling rain</button><button class="opt" data-ok="1">The galloping horse</button><button class="opt">Church bells</button><button class="opt">A music box</button></div></div>
+  <div class="quiz-q" data-q="2"><p class="qt">2. “Erlkönig” is a musical setting of a poem by…</p><div class="opts">
+    <button class="opt">Schiller</button><button class="opt" data-ok="1">Goethe</button><button class="opt">Heine</button><button class="opt">Müller</button></div></div>
+  <div class="quiz-q" data-q="3"><p class="qt">3. A “nocturne” is…</p><div class="opts">
+    <button class="opt">A morning march</button><button class="opt" data-ok="1">A “night piece”, usually lyrical and for piano</button><button class="opt">A dance in triple time</button><button class="opt">An opera overture</button></div></div>
+  <div class="quiz-q" data-q="4"><p class="qt">4. Berlioz&#39;s melody that returns in every movement, transformed, is called the…</p><div class="opts">
+    <button class="opt">Ritornello</button><button class="opt">Ground bass</button><button class="opt" data-ok="1">Idée fixe</button><button class="opt">Ode</button></div></div>
+  <div class="quiz-q" data-q="5"><p class="qt">5. Liszt&#39;s one-movement orchestral works inspired by a poem or story are called…</p><div class="opts">
+    <button class="opt">Symphonies</button><button class="opt">Nocturnes</button><button class="opt">String quartets</button><button class="opt" data-ok="1">Symphonic poems</button></div></div>
+  <p class="hint">Tap an option for instant feedback.</p>
+</div>
+
+<h2>📤 Submit your answers</h2>
+<div class="card">
+  <button class="submit-btn" id="subBtn" onclick="submitAll()">Submit my answers</button>
+  <p class="hint" id="subMsg"></p>
+</div>
+
+<footer>Classical Music Appreciation · The Romantic Era</footer>
+<div class="result">👤 <b id="who">–</b> ・ 👴 <b id="barF">0</b> ・ 👦 <b id="barC">0</b> ・ 🌑 <b id="barE">0</b> ・ 🐎 <b id="barH">0</b> ・ ⏱ <b id="timer">00:00</b></div>
+
+<script>
+const WEB3FORMS_KEY=""; // ← free key from web3forms.com (only an email needed)
+var SUBMIT_URL=""; // local server: "/submit"; or paste any full endpoint URL
+if(WEB3FORMS_KEY){SUBMIT_URL="https://api.web3forms.com/submit";}
+var name="", t0=null, timerInt=null, submitted=false;
+var who={father:0,child:0,erlking:0,horse:0}, whoLog=[], selN=[], freeText="", sameVote=null, quizAns=[], score=0;
+function startAct(){
+  var v=document.getElementById('stName').value.trim();
+  if(!v){alert('Please enter your name first 🙂');return;}
+  name=v; t0=Date.now();
+  document.body.classList.remove('locked');
+  document.getElementById('stName').disabled=true;
+  document.querySelector('.name-btn').style.display='none';
+  var g=document.getElementById('greet'); g.style.display='block';
+  g.textContent='✅ Welcome to the Romantic era, '+name+'!';
+  document.getElementById('who').textContent=name;
+  timerInt=setInterval(function(){
+    var s=Math.floor((Date.now()-t0)/1000);
+    document.getElementById('timer').textContent=String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
+  },1000);
+}
+function tapWho(w,btn){
+  who[w]++; whoLog.push({w:w,t:Math.round((Date.now()-t0)/10)/10});
+  document.getElementById('cnt'+w[0].toUpperCase()).textContent=who[w];
+  document.getElementById('bar'+w[0].toUpperCase()).textContent=who[w];
+  if(who.father+who.child+who.erlking+who.horse>=3){document.getElementById('erlkReveal').classList.add('show');}
+  btn.classList.add('on'); setTimeout(function(){btn.classList.remove('on');},250);
+}
+document.querySelectorAll('.chips .chip').forEach(function(c){
+  c.addEventListener('click',function(){
+    var i=selN.indexOf(c.textContent);
+    if(i>-1){selN.splice(i,1);c.classList.remove('on');}
+    else{ if(selN.length>=3){alert('Maximum 3 — deselect one first');return;} selN.push(c.textContent);c.classList.add('on'); }
+    document.getElementById('cntN').textContent=selN.length;
+  });
+});
+function saveFree(){
+  freeText=document.getElementById('free').value.trim();
+  document.getElementById('savedMsg').textContent = freeText? '✅ Saved: “'+freeText+'”' : 'Write something first!';
+}
+function voteSame(yes){
+  sameVote=yes;
+  document.getElementById('sameY').classList.toggle('on',yes);
+  document.getElementById('sameN').classList.toggle('on',!yes);
+  document.getElementById('sameMsg').textContent='Voted: '+(yes?'same melody in a new costume':'completely different');
+  document.getElementById('sameReveal').classList.add('show');
+}
+document.querySelectorAll('.quiz-q').forEach(function(q){
+  var done=false, qn=parseInt(q.dataset.q);
+  q.querySelectorAll('.opt').forEach(function(o){
+    o.addEventListener('click',function(){
+      if(done)return; done=true;
+      var t=(Date.now()-t0)/1000, ok=!!o.dataset.ok;
+      quizAns.push({q:qn,t:Math.round(t*10)/10,ok:ok});
+      if(ok){o.classList.add('right');score++;}
+      else{o.classList.add('wrong'); q.querySelector('[data-ok]').classList.add('right');}
+      q.querySelectorAll('.opt').forEach(function(x){x.disabled=true;});
+    });
+  });
+});
+function submitAll(){
+  if(!t0){alert('Please enter your name and tap Start first.');return;}
+  if(submitted)return;
+  if(quizAns.length<5 && !confirm('You have only answered '+quizAns.length+'/5 questions. Submit anyway?'))return;
+  submitted=true;
+  var btn=document.getElementById('subBtn'); btn.disabled=true; btn.textContent='Submitting…';
+  var payload={name:name, activity:'R2', totalSec:Math.round((Date.now()-t0)/100),
+    who:who, whoLog:whoLog, nocturne:selN, freeText:freeText, sameMelody:sameVote, quiz:quizAns};
+  if(!SUBMIT_URL){btn.textContent='✅ Done!';document.getElementById('subMsg').textContent='Your answers are saved on this device. Your instructor will collect responses via Mentimeter.';return;}
+  if(WEB3FORMS_KEY){payload=Object.assign({access_key:WEB3FORMS_KEY,subject:"Class Activity"},payload);}
+  fetch(SUBMIT_URL,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(payload)})
+    .then(function(r){if(!r.ok)throw 0;return r.json();})
+    .then(function(){btn.textContent='✅ Submitted — thank you!';document.getElementById('subMsg').textContent='Your results have been sent to the instructor.';})
+    .catch(function(){submitted=false;btn.disabled=false;btn.textContent='Submit my answers';document.getElementById('subMsg').textContent='⚠️ Could not send your answers. If the instructor has not set up a submission link, your results stay safely on this device.';});
+}
+</script>
+</body>
+</html>
